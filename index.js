@@ -10,9 +10,9 @@ const fs = require('fs');
 function resizeGIF(file) {
 
     const sizes = [
-        { suffix: '-s', width: 200 },
-        { suffix: '-m', width: 600 },
-        { suffix: '-l', width: 900 }
+        { suffix: '-s', width: 200 }//,
+        // { suffix: '-m', width: 600 },
+        // { suffix: '-l', width: 900 }
     ];
 
     return Promise.all(sizes.map(size => {
@@ -27,7 +27,7 @@ function resizeGIF(file) {
             const output = `temp/${fileBasenameNoExtension}${size.suffix}${newFileExtension}`;
 
             fs.createReadStream(input)
-                .pipe(createStream({ width: size.width }))
+                .pipe(createStream({ width: 500 }))
                 .pipe(fs.createWriteStream(output));
         }
       )
