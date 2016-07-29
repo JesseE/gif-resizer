@@ -14,6 +14,7 @@
     "concat-frames": "^1.0.3",
     "fs": "0.0.2",
     "gif-stream": "^1.1.0",
+    "gif-video": "0.0.2",
     "gifsicle": "^3.0.3",
     "glob": "^7.0.5",
     "gulp": "^3.9.1",

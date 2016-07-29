@@ -1,6 +1,7 @@
 'use strict';
 const execFile = require('child_process').execFile;
 const gifsicle = require('gifsicle');
+const createStream = require('gif-video');
 const glob = require('glob');
 const path = require('path');
 const files = glob.sync('./src/*.gif', {root: './src/'});
@@ -11,24 +12,23 @@ function resizeGIF(file) {
     const sizes = [
         { suffix: '-s', width: 200 },
         { suffix: '-m', width: 600 },
-        { suffix: '-l', width: 1440 }
+        { suffix: '-l', width: 900 }
     ];
 
     return Promise.all(sizes.map(size => {
-
         return new Promise((resolve, reject) => {
 
             let fileBasename = path.basename(file);
             let fileExtension = path.extname(file);
             let fileBasenameNoExtension = fileBasename.slice(0,-1 * fileExtension.length);
+            let newFileExtension = '.mp4';
 
             const input = `src/${fileBasename}`;
-            const output = `temp/${fileBasenameNoExtension}${size.suffix}${fileExtension}`;
+            const output = `temp/${fileBasenameNoExtension}${size.suffix}${newFileExtension}`;
 
-            //gifsicle used for resizing the input. -o is the oporation send output to file  and -03 is the maximum gif optimization level
-            execFile(gifsicle, ['-o', output, input,'--resize-width', size.width, '-O3'], err => {
-                err ? reject(err) : resolve(output);
-            });
+            fs.createReadStream(input)
+                .pipe(createStream({ width: size.width }))
+                .pipe(fs.createWriteStream(output));
         }
       )
     }));
